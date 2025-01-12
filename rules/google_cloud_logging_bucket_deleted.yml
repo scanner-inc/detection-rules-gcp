@@ -1,0 +1,27 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud Logging Bucket deleted
+description: |-
+  ## Goal
+  Detect when a logging bucket is deleted in Google Cloud, as this may indicate defense evasion by an adversary.
+
+  ## Strategy
+  Monitor Google Cloud audit logs for the invocation of the method:
+  - `google.logging.v2.ConfigServiceV2.DeleteBucket`
+
+  ## Triage and response
+  Assess if the Google Cloud user should be deleting the logging bucket indicated by the resource name.
+enabled: true
+severity: Medium
+query_text: |-
+  protoPayload.serviceName:logging.googleapis.com
+  protoPayload.methodName:google.logging.v*.ConfigServiceV*.DeleteBucket
+  | groupbycount(project_id, protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- medium_severity_alerts
+tags:
+- source.gcp
+- techniques.t1070.indicator_removal
+- tactics.ta0005.defense_evasion

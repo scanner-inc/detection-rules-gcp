@@ -1,0 +1,29 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud logging sink modified
+description: |-
+  ## Goal
+  Detect changes to Google Cloud logging sinks that may prevent audit logs from being sent.
+
+  ## Strategy
+  Monitor Google Cloud admin activity audit logs for the following actions:
+
+  * Update sink
+  * Delete sink
+
+  ## Triage and response
+  Review the sink to ensure it is properly configured.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.logging.sink
+  protoPayload.methodName:(google.logging.v2.ConfigServiceV2.UpdateSink google.logging.v2.ConfigServiceV2.DeleteSink)
+  | groupbycount(protoPayload.authenticationInfo.principalEmail, data.protoPayload.resourceName)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- source.gcp
+- techniques.t1562.impair_defenses
+- tactics.ta0005.defense_evasion

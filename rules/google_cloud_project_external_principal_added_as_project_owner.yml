@@ -1,0 +1,35 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud Project external principal added as project owner
+description: |-
+  ## Goal
+  Detect attempts to add an external principal as a project owner in Google Cloud.
+
+  ## Strategy
+  This rule monitors Google Cloud Audit Logs for attempts to add an external principal as a project owner. An attacker who has gained initial access may try to maintain access by adding an external principal.
+
+  **Notes:**
+
+  * The rule triggers when a principal with an email address from the domains `gmail.com` or `googlemail.com` is added to a project.
+
+  ## Triage and Response
+  1. Contact the user or owner of the service account to verify the legitimacy of the action.
+  2. If the action is legitimate, consider adding the user or service account to a suppression list.
+  3. Otherwise, review the User Investigation dashboard to see if the user or service account has taken other actions.
+  4. If the triage indicates the action was taken by an attacker, initiate your company's incident response process and investigate.
+enabled: true
+severity: High
+query_text: |-
+  %ingest.source_type:gcp.project
+  protoPayload.serviceName:cloudresourcemanager.googleapis.com
+  protoPayload.methodName:InsertProjectOwnershipInvite
+  data.protoPayload.request.member:(*gmail.com *googlemail.com)
+  | groupbycount(project_id, protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- high_severity_alerts
+tags:
+- source.gcp
+- techniques.t1098.account_manipulation
+- tactics.ta0003.persistence

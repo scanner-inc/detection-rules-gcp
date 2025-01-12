@@ -1,0 +1,28 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud Storage Bucket modified
+description: |-
+  ## Goal
+  Detect administrative changes to a GCS Bucket, such as updates to the retention policy or bucket lock.
+
+  ## Strategy
+  Monitor GCS bucket admin activity audit logs to identify updates made by the method:
+
+  * storage.buckets.update
+
+  ## Triage and response
+  Review the bucket to ensure proper configuration.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.gcs.bucket
+  protoPayload.methodName:storage.buckets.update
+  | groupbycount(project_id, bucket_name, protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- techniques.t1565.data_manipulation
+- source.gcp
+- tactics.ta0040.impact

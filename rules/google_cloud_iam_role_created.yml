@@ -1,0 +1,29 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud IAM role created
+description: |-
+  ## Goal
+  Detect when a Google Cloud IAM role is created.
+
+  ## Strategy
+  Monitor Google Cloud IAM activity audit logs for the invocation of the method:
+
+  * `google.iam.admin.v1.CreateRole`
+
+  ## Triage and response
+  1. Investigate the user who created the IAM role and ensure the permissions in the response are scoped properly.
+  2. Review the users associated with the role to ensure they should have the attached permissions.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.iam.role
+  protoPayload.methodName:google.iam.admin.v1.CreateRole
+  | groupbycount(protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- source.gcp
+- techniques.t1098.account_manipulation
+- tactics.ta0003.persistence

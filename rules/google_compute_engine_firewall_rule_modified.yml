@@ -1,0 +1,31 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Compute Engine firewall rule modified
+description: |-
+  ## Goal
+  Detect when a firewall rule is created, modified, or deleted.
+
+  ## Strategy
+  Monitor Google Compute Engine activity audit logs for the following methods:
+
+  * delete a firewall
+  * insert a firewall
+  * patch a firewall
+
+  ## Triage and response
+  1. Review the log and role to ensure proper permissions.
+  2. Check the users associated with the role to confirm they should have those permissions.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.gce.firewall.rule
+  protoPayload.methodName:(v1.compute.firewalls.delete v1.compute.firewalls.insert v1.compute.firewalls.patch)
+  | groupbycount(project_id, data.protoPayload.resourceOriginalState.name, protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- source.gcp
+- techniques.t1562.impair_defenses
+- tactics.ta0005.defense_evasion

@@ -1,0 +1,30 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud Storage Bucket enumerated
+description: |-
+  ## Goal
+  Detect when a service account lists GCS buckets.
+
+  ## Strategy
+  Monitor GCS bucket admin activity audit logs to identify when a service account invokes the method:
+  * `storage.buckets.list`
+
+  ## Triage and response
+  Determine whether the service account should be making list bucket calls.
+  * If the account was compromised, secure it and investigate the compromise and any unauthorized activity.
+  * If the service account owner intended to make the list buckets call, evaluate the necessity of the call, as it could pose a security risk. If it's unnecessary, adjust the rule's filter to stop generating signals for this account.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.gcs.bucket
+  protoPayload.methodName:storage.buckets.list
+  protoPayload.authenticationInfo.principalEmail:*gserviceaccount.com
+  | groupbycount(project_id, protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- techniques.t1083.file_and_directory_discovery
+- source.gcp
+- tactics.ta0007.discovery

@@ -1,0 +1,28 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud Storage Bucket contents downloaded without authentication
+description: |-
+  ## Goal
+  Detect unauthenticated access to an object in a GCS bucket.
+
+  ## Strategy
+  Monitor the GCS bucket for get requests made by unauthenticated users.
+
+  ## Triage and response
+  Investigate the logs to determine if the accessed bucket should be accessible to unauthenticated users.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.gcs.bucket
+  (not protoPayload.authenticationInfo.principalEmail:*)
+  protoPayload.methodName:storage.objects.get
+  severity:info
+  | groupbycount(project_id, bucket_name)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- source.gcp
+- tactics.ta0009.collection
+- techniques.t1530.data_from_cloud_storage

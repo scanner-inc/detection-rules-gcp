@@ -1,0 +1,30 @@
+# schema: https://scanner.dev/schema/scanner-detection-rule.v1.json
+name: Google Cloud Storage Bucket permissions modified
+description: |-
+  ## Goal
+  Detect changes in permissions on a GCS Bucket.
+
+  ## Strategy
+  Monitor GCS bucket admin activity logs for the invocation of the method:
+  * storage.setIamPermissions
+
+  ## Triage and response
+  Review the bucket permissions to ensure they are not overly permissive.
+enabled: true
+severity: Informational
+query_text: |-
+  %ingest.source_type:gcp.gcs.bucket
+  protoPayload.methodName:storage.setIamPermissions
+  (not protoPayload.status.message:ERROR)
+  | groupbycount(project_id, bucket_name, protoPayload.authenticationInfo.principalEmail)
+  | where @q.count > 0
+time_range_s: 300
+run_frequency_s: 60
+event_sink_keys:
+- informational_severity_alerts
+tags:
+- tactics.ta0004.privilege_escalation
+- source.gcp
+- techniques.t1098.account_manipulation
+- techniques.t1562.impair_defenses
+- tactics.ta0005.defense_evasion
