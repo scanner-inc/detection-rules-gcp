@@ -1,5 +1,9 @@
 name: Validate Detection Rules
-on: [push, pull_request]
+
+on: # On any pull request, or any push directly to main:
+  push:
+    branches: [ main ]
+  pull_request:
 
 jobs:
   validate:
