@@ -1,0 +1,14 @@
+name: Validate Detection Rules
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: scanner-inc/validate-detection-rules@v0.1.0
+        with:
+          scanner_api_url: '${{ secrets.SCANNER_API_URL }}'
+          scanner_api_key: '${{ secrets.SCANNER_API_KEY }}'
+          dir: 'rules'
+          recursive: true
