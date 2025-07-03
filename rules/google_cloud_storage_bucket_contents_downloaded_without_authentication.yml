@@ -25,4 +25,4 @@ event_sink_keys:
 tags:
 - source.gcp
 - tactics.ta0009.collection
-- techniques.t1530.data_from_cloud_storage
+- techniques.t1530.data_from_cloud_storage_object

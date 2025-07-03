@@ -23,5 +23,5 @@ event_sink_keys:
 - medium_severity_alerts
 tags:
 - source.gcp
-- techniques.t1070.indicator_removal
+- techniques.t1070.indicator_removal_on_host
 - tactics.ta0005.defense_evasion
