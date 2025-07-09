@@ -12,7 +12,7 @@ description: |-
 enabled: true
 severity: Informational
 query_text: |-
-  %ingest.source_type:gcp.pubsub.topic
+  %ingest.source_type:gcp
   protoPayload.methodName:google.pubsub.v1.Publisher.DeleteTopic
   | groupbycount(protoPayload.authenticationInfo.principalEmail, data.protoPayload.resourceName)
   | where @q.count > 0

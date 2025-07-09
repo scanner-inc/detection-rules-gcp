@@ -12,7 +12,7 @@ description: |-
 enabled: true
 severity: Informational
 query_text: |-
-  %ingest.source_type:gcp.gcs.bucket
+  %ingest.source_type:gcp
   (not protoPayload.authenticationInfo.principalEmail:*)
   protoPayload.methodName:storage.objects.get
   severity:info

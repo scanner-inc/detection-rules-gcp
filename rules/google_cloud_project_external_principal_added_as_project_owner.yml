@@ -19,7 +19,7 @@ description: |-
 enabled: true
 severity: High
 query_text: |-
-  %ingest.source_type:gcp.project
+  %ingest.source_type:gcp
   protoPayload.serviceName:cloudresourcemanager.googleapis.com
   protoPayload.methodName:InsertProjectOwnershipInvite
   data.protoPayload.request.member:(*gmail.com *googlemail.com)

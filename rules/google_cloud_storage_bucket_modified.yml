@@ -14,7 +14,7 @@ description: |-
 enabled: true
 severity: Informational
 query_text: |-
-  %ingest.source_type:gcp.gcs.bucket
+  %ingest.source_type:gcp
   protoPayload.methodName:storage.buckets.update
   | groupbycount(project_id, bucket_name, protoPayload.authenticationInfo.principalEmail)
   | where @q.count > 0
