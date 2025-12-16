@@ -12,7 +12,7 @@ description: |-
 enabled: true
 severity: Informational
 query_text: |-
-  %ingest.source_type:gcp
+  @scnr.source_type:gcp
   protoPayload.methodName:SetIamPolicy
   | groupbycount(protoPayload.authenticationInfo.principalEmail)
   | where @q.count > 0

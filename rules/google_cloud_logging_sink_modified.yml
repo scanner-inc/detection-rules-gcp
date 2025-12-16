@@ -15,7 +15,7 @@ description: |-
 enabled: true
 severity: Informational
 query_text: |-
-  %ingest.source_type:gcp
+  @scnr.source_type:gcp
   protoPayload.methodName:(google.logging.v2.ConfigServiceV2.UpdateSink google.logging.v2.ConfigServiceV2.DeleteSink)
   | groupbycount(protoPayload.authenticationInfo.principalEmail, data.protoPayload.resourceName)
   | where @q.count > 0
