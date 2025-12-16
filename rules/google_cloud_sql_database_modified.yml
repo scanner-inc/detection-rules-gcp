@@ -16,7 +16,7 @@ description: |-
 enabled: true
 severity: Informational
 query_text: |-
-  %ingest.source_type:gcp
+  @scnr.source_type:gcp
   protoPayload.methodName:(cloudsql.instances.create cloudsql.instances.create cloudsql.users.create cloudsql.users.update)
   | groupbycount(project_id, database_id, protoPayload.authenticationInfo.principalEmail)
   | where @q.count > 0
