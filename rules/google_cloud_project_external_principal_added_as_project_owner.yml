@@ -16,7 +16,6 @@ description: |-
   2. If the action is legitimate, consider adding the user or service account to a suppression list.
   3. Otherwise, review the User Investigation dashboard to see if the user or service account has taken other actions.
   4. If the triage indicates the action was taken by an attacker, initiate your company's incident response process and investigate.
-enabled: true
 severity: High
 query_text: |-
   @scnr.source_type:gcp

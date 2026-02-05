@@ -12,7 +12,6 @@ description: |-
   ## Triage and response
   1. Investigate the user who created the IAM role and ensure the permissions in the response are scoped properly.
   2. Review the users associated with the role to ensure they should have the attached permissions.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

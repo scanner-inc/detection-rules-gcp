@@ -12,7 +12,6 @@ description: |-
   Determine whether the service account should be making list bucket calls.
   * If the account was compromised, secure it and investigate the compromise and any unauthorized activity.
   * If the service account owner intended to make the list buckets call, evaluate the necessity of the call, as it could pose a security risk. If it's unnecessary, adjust the rule's filter to stop generating signals for this account.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

@@ -9,7 +9,6 @@ description: |-
 
   ## Triage and response
   Investigate the logs to determine if the accessed bucket should be accessible to unauthenticated users.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

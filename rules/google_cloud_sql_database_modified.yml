@@ -13,7 +13,6 @@ description: |-
 
   ## Triage and response
   1. Review the Google Cloud SQL database to ensure it is properly configured with the correct permissions.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

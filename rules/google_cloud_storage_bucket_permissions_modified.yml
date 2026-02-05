@@ -10,7 +10,6 @@ description: |-
 
   ## Triage and response
   Review the bucket permissions to ensure they are not overly permissive.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

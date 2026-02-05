@@ -14,7 +14,6 @@ description: |-
   ## Triage and response
   1. Review the log and role to ensure proper permissions.
   2. Check the users associated with the role to confirm they should have those permissions.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

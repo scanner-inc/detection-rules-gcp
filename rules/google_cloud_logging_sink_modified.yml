@@ -12,7 +12,6 @@ description: |-
 
   ## Triage and response
   Review the sink to ensure it is properly configured.
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp

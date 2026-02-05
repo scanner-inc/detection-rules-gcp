@@ -10,7 +10,6 @@ description: |-
 
   ## Triage and response
   Assess if the Google Cloud user should be deleting the logging bucket indicated by the resource name.
-enabled: true
 severity: Medium
 query_text: |-
   protoPayload.serviceName:logging.googleapis.com

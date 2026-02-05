@@ -9,7 +9,6 @@ description: |-
 
   ## Triage and response
   Review the log and inspect the policy deltas to ensure none of the actions are "REMOVE."
-enabled: true
 severity: Informational
 query_text: |-
   @scnr.source_type:gcp
